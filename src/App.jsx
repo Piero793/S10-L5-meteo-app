@@ -5,8 +5,7 @@ import Footer from "./components/Footer";
 import HomePage from "./components/HomePage";
 import SingleCity from "./components/SingleCity";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
-const cities = ["Udine", "Rome", "Milan", "Florence", "Naples", "Bari"];
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
   return (
@@ -14,9 +13,9 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<HomePage cities={cities} />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/city/:cityName" element={<SingleCity />} />
-          {/* <Route path="*" element={<ErrorPage/>} /> */}
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>

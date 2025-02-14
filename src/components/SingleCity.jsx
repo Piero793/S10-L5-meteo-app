@@ -21,7 +21,6 @@ const SingleCity = () => {
       setWeatherData(data);
 
       const { lat, lon } = data.coord;
-      console.log(`Fetching forecast data for coordinates: ${lat}, ${lon}...`);
       const forecastResponse = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`
       );

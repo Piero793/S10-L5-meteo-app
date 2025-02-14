@@ -1,13 +1,27 @@
+import { useState } from "react";
 import { Navbar } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
+import { Link, useNavigate } from "react-router-dom";
 
 function NavBar() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (event) => {
+    if (event.key === "Enter" && searchQuery.trim() !== "") {
+      console.log(`Navigating to /city/${searchQuery}`);
+      navigate(`/city/${searchQuery}`);
+    }
+  };
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="#">Meteo</Navbar.Brand>
+        <Link to="/" className="navbar-brand">
+          Meteo
+        </Link>
         <Navbar.Collapse id="navbarScroll">
           <Form className="d-flex flex-grow-1">
             <InputGroup className="flex-grow-1">
@@ -17,6 +31,9 @@ function NavBar() {
                 aria-label="Search"
                 aria-describedby="search-icon"
                 className="flex-grow-1"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
               />
             </InputGroup>
           </Form>
