@@ -87,14 +87,14 @@ const SingleCity = () => {
                     <Card.Text>
                       Clima:
                       {item.weather.map((weatherItem) => (
-                        <p key={weatherItem.id}>
+                        <span key={weatherItem.id}>
                           <img
                             src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
                             alt={weatherItem.description}
                             title={weatherItem.description}
                           />
                           {weatherItem.description}
-                        </p>
+                        </span>
                       ))}
                     </Card.Text>
                   </Card.Body>
