@@ -35,7 +35,7 @@ const HomePage = () => {
                 <Card.Title className="text-center">{city.name}</Card.Title>
                 <Card.Text>Latitude: {city.lat}</Card.Text>
                 <Card.Text>Longitude: {city.lon}</Card.Text>
-                <Link to={`/city/${city.name}`} className="btn btn-primary d-flex justify-content-center">
+                <Link to={`/city/${city.name}`} className="btn btn-secondary d-flex justify-content-center">
                   Details
                 </Link>
               </Card.Body>
