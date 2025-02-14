@@ -6,13 +6,15 @@ import HomePage from "./components/HomePage";
 import SingleCity from "./components/SingleCity";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+const cities = ["Udine", "Rome", "Milan", "Florence", "Naples", "Bari"];
+
 function App() {
   return (
     <>
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage cities={cities} />} />
           <Route path="/city/:cityName" element={<SingleCity />} />
           {/* <Route path="*" element={<ErrorPage/>} /> */}
         </Routes>

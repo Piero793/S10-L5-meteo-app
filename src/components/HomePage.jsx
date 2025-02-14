@@ -6,27 +6,22 @@ import Col from "react-bootstrap/Col";
 import { Link } from "react-router-dom";
 
 const API_KEY = "2cec432b452dfb21ac1220abe36c21b8";
-const cities = ["Udine", "Rome", "Milan", "Florence", "Naples", "Bari"]; // Aggiungi qui le città che vuoi visualizzare
+const cities = ["Udine", "Rome", "Milan", "Florence", "Naples", "Bari"];
 
 const HomePage = () => {
   const [cityData, setCityData] = useState([]);
 
   useEffect(() => {
-    const fetchCityData = async () => {
-      console.log("Fetching city data...");
-      const fetchedData = [];
-      for (const city of cities) {
-        const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}`);
-        const data = await response.json();
-        console.log("Data received for", city, ":", data);
-        if (data.length > 0) {
-          fetchedData.push(data[0]);
-        }
-      }
-      setCityData(fetchedData);
-    };
+    console.log("Fetching city data...");
 
-    fetchCityData();
+    cities.forEach(async (city) => {
+      const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}`);
+      const data = await response.json();
+      console.log("Data received for", city, ":", data);
+      if (data.length > 0) {
+        setCityData((prevData) => [...prevData, data[0]]);
+      }
+    });
   }, []);
 
   return (
