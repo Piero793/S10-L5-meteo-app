@@ -13,7 +13,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/city/:cityId" element={<SingleCity />} />
+          <Route path="/city/:cityName" element={<SingleCity />} />
           {/* <Route path="*" element={<ErrorPage/>} /> */}
         </Routes>
         <Footer />

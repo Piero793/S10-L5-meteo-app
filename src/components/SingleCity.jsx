@@ -1,39 +1,110 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Card } from "react-bootstrap";
+import Card from "react-bootstrap/Card";
+import { Col, Container, Row } from "react-bootstrap";
 
-const DetailPage = () => {
-  const { id } = useParams();
-  const [city, setCity] = useState(null);
+const API_KEY = "2cec432b452dfb21ac1220abe36c21b8";
+
+const SingleCity = () => {
+  const { cityName } = useParams();
+  const [weatherData, setWeatherData] = useState(null);
+  const [forecastData, setForecastData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`URL_DELL_API_GRATUITA/${id}`)
-      .then((response) => response.json())
-      .then((data) => setCity(data))
-      .catch((error) => console.error("Errore:", error));
-  }, [id]);
+    const fetchWeatherData = async () => {
+      console.log(`Fetching ${cityName}...`);
+      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`);
+      console.log("Response:", response);
+      const data = await response.json();
+      console.log("dati:", data);
+      setWeatherData(data);
+
+      const { lat, lon } = data.coord;
+      console.log(`Fetching forecast data for coordinates: ${lat}, ${lon}...`);
+      const forecastResponse = await fetch(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+      );
+      const forecastData = await forecastResponse.json();
+      setForecastData(forecastData);
+
+      setLoading(false);
+    };
+
+    fetchWeatherData();
+  }, [cityName]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const kelvinToCelsius = (kelvin) => {
+    const celsius = (kelvin - 273.15).toFixed(2);
+    return celsius;
+  };
 
   return (
-    <Container className="mt-5">
-      {city && (
-        <Card className="mb-4">
-          <Card.Img variant="top" src={city.weather[0].icon_url} alt={city.weather[0].description} />
-          <Card.Body>
-            <Card.Title className="text-center">{city.name}</Card.Title>
-            <Card.Text>
-              <strong>Temperatura:</strong> {city.main.temp}°C
-            </Card.Text>
-            <Card.Text>
-              <strong>Umidità:</strong> {city.main.humidity}%
-            </Card.Text>
-            <Card.Text>
-              <strong>Descrizione:</strong> {city.weather[0].description}
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      )}
+    <Container className="text-center">
+      <Row>
+        <Col>
+          <Card>
+            <Card.Body>
+              <Card.Title>Meteo di {weatherData.name}</Card.Title>
+              <Card.Text>Temperatura: {kelvinToCelsius(weatherData.main.temp)}°C</Card.Text>
+              <Card.Text>Temperatura percepita: {kelvinToCelsius(weatherData.main.feels_like)}°C</Card.Text>
+              <Card.Text>Temperatura Minima: {kelvinToCelsius(weatherData.main.temp_min)}°C</Card.Text>
+              <Card.Text>Temperatura Massima: {kelvinToCelsius(weatherData.main.temp_max)}°C</Card.Text>
+              <Card.Text>Pressione atmosferica: {weatherData.main.pressure} hPa</Card.Text>
+              <Card.Text>Umidità: {weatherData.main.humidity}%</Card.Text>
+              <Card.Text>Velocità del vento: {weatherData.wind.speed} m/s</Card.Text>
+              <Card.Text>
+                Clima:{" "}
+                {weatherData.weather.map((item) => (
+                  <span key={item.id}>
+                    <img
+                      src={`https://openweathermap.org/img/wn/${item.icon}.png`}
+                      alt={item.description}
+                      title={item.description}
+                    />
+                    {item.description}
+                  </span>
+                ))}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Container className="my-4">
+        <h2>Previsioni per i prossimi 5 giorni</h2>
+        <Row>
+          {forecastData &&
+            forecastData.list.map((item, index) => (
+              <Col key={index} sm={6} md={4} lg={3} xxl={2}>
+                <Card className="mb-3">
+                  <Card.Body>
+                    <Card.Text>Data e ora: {item.dt_txt}</Card.Text>
+                    <Card.Text>Temperatura: {kelvinToCelsius(item.main.temp)}°C</Card.Text>
+                    <Card.Text>
+                      Clima:{" "}
+                      {item.weather.map((weatherItem) => (
+                        <span key={weatherItem.id}>
+                          <img
+                            src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
+                            alt={weatherItem.description}
+                            title={weatherItem.description}
+                          />
+                          {weatherItem.description}
+                        </span>
+                      ))}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+        </Row>
+      </Container>
     </Container>
   );
 };
 
-export default DetailPage;
+export default SingleCity;
