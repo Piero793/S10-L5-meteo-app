@@ -37,6 +37,7 @@ const SingleCity = () => {
     return <div>Loading...</div>;
   }
 
+  //conversione unità di misura
   const kelvinToCelsius = (kelvin) => {
     const celsius = (kelvin - 273.15).toFixed(2);
     return celsius;
