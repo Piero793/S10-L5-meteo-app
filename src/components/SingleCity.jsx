@@ -40,7 +40,7 @@ const SingleCity = () => {
   //conversione unità di misura
   const kelvinToCelsius = (kelvin) => {
     const celsius = (kelvin - 273.15).toFixed(2);
-    return celsius;
+    return Math.round(celsius);
   };
 
   return (
@@ -85,16 +85,16 @@ const SingleCity = () => {
                     <Card.Text>Data e ora: {item.dt_txt}</Card.Text>
                     <Card.Text>Temperatura: {kelvinToCelsius(item.main.temp)}°C</Card.Text>
                     <Card.Text>
-                      Clima:{" "}
+                      Clima:
                       {item.weather.map((weatherItem) => (
-                        <span key={weatherItem.id}>
+                        <p key={weatherItem.id}>
                           <img
                             src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
                             alt={weatherItem.description}
                             title={weatherItem.description}
                           />
                           {weatherItem.description}
-                        </span>
+                        </p>
                       ))}
                     </Card.Text>
                   </Card.Body>
