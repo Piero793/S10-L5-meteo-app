@@ -44,12 +44,12 @@ const SingleCity = () => {
   };
 
   return (
-    <Container className="text-center">
+    <Container className="text-center mt-4">
       <Row>
         <Col>
           <Card>
             <Card.Body>
-              <Card.Title>Meteo di {weatherData.name}</Card.Title>
+              <Card.Title>Meteo in {weatherData.name}</Card.Title>
               <Card.Text>Temperatura: {kelvinToCelsius(weatherData.main.temp)}°C</Card.Text>
               <Card.Text>Temperatura percepita: {kelvinToCelsius(weatherData.main.feels_like)}°C</Card.Text>
               <Card.Text>Temperatura Minima: {kelvinToCelsius(weatherData.main.temp_min)}°C</Card.Text>
@@ -85,16 +85,18 @@ const SingleCity = () => {
                     <Card.Text>Data e ora: {item.dt_txt}</Card.Text>
                     <Card.Text>Temperatura: {kelvinToCelsius(item.main.temp)}°C</Card.Text>
                     <Card.Text>
-                      Clima:
+                      <p> Clima:</p>
                       {item.weather.map((weatherItem) => (
-                        <span key={weatherItem.id}>
-                          <img
-                            src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
-                            alt={weatherItem.description}
-                            title={weatherItem.description}
-                          />
-                          {weatherItem.description}
-                        </span>
+                        <div key={weatherItem.id}>
+                          <div>
+                            <img
+                              src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
+                              alt={weatherItem.description}
+                              title={weatherItem.description}
+                            />
+                          </div>
+                          <p> {weatherItem.description}</p>
+                        </div>
                       ))}
                     </Card.Text>
                   </Card.Body>

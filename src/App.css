@@ -1,15 +1,19 @@
 body,
 h1 {
   font-weight: bold;
-  font-family: Arial, sans-serif;
-  background-color: antiquewhite;
+  font-family: "Times New Roman", Times, serif;
+  background-color: #4e81b4;
   margin: 0;
   padding: 0;
-  color: rgb(212, 167, 109);
+  color: #ffffff;
+}
+
+.navBarColor {
+  background-color: inherit;
 }
 
 .card {
-  background-color: rgb(212, 167, 109);
+  background-color: #3176ba;
   border: 1px solid #ccc;
   border-radius: 10px;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;

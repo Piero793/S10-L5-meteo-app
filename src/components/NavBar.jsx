@@ -17,12 +17,16 @@ function NavBar() {
   };
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="navBarColor">
       <Container fluid>
-        <Link to="/" className="navbar-brand">
-          Meteo
+        <Link to="/" className="navbar-brand d-none d-lg-block">
+          Meteo{" "}
+          <span>
+            <i className="bi bi-search ms-2"></i>
+          </span>
         </Link>
-        <Navbar.Collapse id="navbarScroll">
+
+        <Navbar.Collapse id="navbarScroll" className="d-flex flex-grow-1">
           <Form className="d-flex flex-grow-1">
             <InputGroup className="flex-grow-1">
               <Form.Control
