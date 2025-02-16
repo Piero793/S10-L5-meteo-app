@@ -84,21 +84,19 @@ const SingleCity = () => {
                   <Card.Body>
                     <Card.Text>Data e ora: {item.dt_txt}</Card.Text>
                     <Card.Text>Temperatura: {kelvinToCelsius(item.main.temp)}°C</Card.Text>
-                    <Card.Text>
-                      <p> Clima:</p>
-                      {item.weather.map((weatherItem) => (
-                        <div key={weatherItem.id}>
-                          <div>
-                            <img
-                              src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
-                              alt={weatherItem.description}
-                              title={weatherItem.description}
-                            />
-                          </div>
-                          <p> {weatherItem.description}</p>
+                    <Card.Text>Clima:</Card.Text>
+                    {item.weather.map((weatherItem) => (
+                      <div key={weatherItem.id}>
+                        <div>
+                          <img
+                            src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
+                            alt={weatherItem.description}
+                            title={weatherItem.description}
+                          />
                         </div>
-                      ))}
-                    </Card.Text>
+                        <Card.Text>{weatherItem.description}</Card.Text>
+                      </div>
+                    ))}
                   </Card.Body>
                 </Card>
               </Col>
