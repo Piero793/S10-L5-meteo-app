@@ -20,7 +20,11 @@ function NavBar() {
     <Navbar expand="lg" className="navBarColor">
       <Container fluid>
         <Link to="/" className="navbar-brand d-none d-lg-block">
-          Meteo{" "}
+          <img
+            src="https://www.freeiconspng.com/uploads/weather-icon-png-2.png"
+            alt="meteo"
+            style={{ widt: 50, height: 50 }}
+          />
           <span>
             <i className="bi bi-search ms-2"></i>
           </span>

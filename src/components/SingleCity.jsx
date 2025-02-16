@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import { Col, Container, Row } from "react-bootstrap";
 
@@ -45,6 +45,9 @@ const SingleCity = () => {
 
   return (
     <Container className="text-center mt-4">
+      <Link to="/" className="navbar-brand d-block text-center text-light mb-4">
+        Torna alla home
+      </Link>
       <Row>
         <Col>
           <Card>

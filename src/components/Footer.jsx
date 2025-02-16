@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 const Footer = () => {
   return (
     <footer>
-      <div className="row justify-content-center mt-5">
+      <div className="row justify-content-center mt-5 text-center">
         <div className="col col-6">
           <div className="row"></div>
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-4">
