@@ -10,19 +10,40 @@ const cities = ["Udine", "Rome", "Milan", "Florence", "Naples", "Bari"];
 
 const HomePage = () => {
   const [cityData, setCityData] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Fetching"); //non riesco a risolvere il problema per cui a volte al rendering del componente mi si duplicano le stesse città
+    console.log("Fetching");
 
-    cities.forEach(async (city) => {
-      const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}`);
-      const data = await response.json();
-      console.log("Data received for", city, ":", data);
-      if (data.length > 0) {
-        setCityData((prevData) => [...prevData, data[0]]);
+    const fetchCityData = async () => {
+      try {
+        const fetchedData = [];
+
+        for (const city of cities) {
+          const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_KEY}`);
+          if (!response.ok) {
+            throw new Error(`Errore nella richiesta per ${city}: ${response.status}`);
+          }
+          const data = await response.json();
+          console.log("Data ricevuti per", city, ":", data);
+          if (data.length > 0) {
+            fetchedData.push(data[0]);
+          }
+        }
+
+        setCityData(fetchedData);
+      } catch (error) {
+        console.error("Errore:", error);
+        setError(error.message);
       }
-    });
+    };
+
+    fetchCityData();
   }, []);
+
+  if (error) {
+    return <div>Errore: {error}</div>;
+  }
 
   return (
     <Container className="mt-4 text-center">
