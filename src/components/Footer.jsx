@@ -1,9 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { Container } from "react-bootstrap";
 
 const Footer = () => {
   return (
-    <footer>
+    <Container>
       <div className="row justify-content-center mt-5 text-center">
         <div className="col col-6">
           <div className="row"></div>
@@ -59,7 +60,7 @@ const Footer = () => {
           <div className="row"></div>
         </div>
       </div>
-    </footer>
+    </Container>
   );
 };
 
