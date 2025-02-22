@@ -10,24 +10,37 @@ const SingleCity = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [forecastData, setForecastData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
-      console.log(`Fetching ${cityName}...`);
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`);
-      console.log("Response:", response);
-      const data = await response.json();
-      console.log("dati:", data);
-      setWeatherData(data);
+      try {
+        console.log(`Fetching ${cityName}...`);
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`);
+        if (!response.ok) {
+          throw new Error(`Errore nella richiesta: ${response.status}`);
+        }
+        console.log("Response:", response);
+        const data = await response.json();
+        console.log("dati:", data);
+        setWeatherData(data);
 
-      const { lat, lon } = data.coord;
-      const forecastResponse = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`
-      );
-      const forecastData = await forecastResponse.json();
-      setForecastData(forecastData);
+        const { lat, lon } = data.coord;
+        const forecastResponse = await fetch(
+          `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+        );
+        if (!forecastResponse.ok) {
+          throw new Error(`Errore nella richiesta: ${forecastResponse.status}`);
+        }
+        const forecastData = await forecastResponse.json();
+        setForecastData(forecastData);
 
-      setLoading(false);
+        setLoading(false);
+      } catch (error) {
+        console.error("Errore:", error);
+        setError(error.message);
+        setLoading(false);
+      }
     };
 
     fetchWeatherData();
@@ -35,6 +48,10 @@ const SingleCity = () => {
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Errore: {error}</div>;
   }
 
   //conversione unità di misura
