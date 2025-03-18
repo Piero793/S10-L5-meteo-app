@@ -45,25 +45,32 @@ const HomePage = () => {
     return <div>Errore: {error}</div>;
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Form submission prevented");
+  };
+
   return (
     <Container className="mt-4 text-center">
       <h1>Meteo nelle principali città di oggi</h1>
-      <Row>
-        {cityData.map((city, index) => (
-          <Col key={index} sm={12} md={6} lg={4} className="my-3">
-            <Card>
-              <Card.Body>
-                <Card.Title className="text-center">{city.name}</Card.Title>
-                <Card.Text>Latitude: {city.lat}</Card.Text>
-                <Card.Text>Longitude: {city.lon}</Card.Text>
-                <Link to={`/city/${city.name}`} className="btn btn-info d-flex justify-content-center text-light">
-                  Details
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+      <form onSubmit={handleSubmit}>
+        <Row>
+          {cityData.map((city, index) => (
+            <Col key={index} sm={12} md={6} lg={4} className="my-3">
+              <Card>
+                <Card.Body>
+                  <Card.Title className="text-center">{city.name}</Card.Title>
+                  <Card.Text>Latitude: {city.lat}</Card.Text>
+                  <Card.Text>Longitude: {city.lon}</Card.Text>
+                  <Link to={`/city/${city.name}`} className="btn btn-info d-flex justify-content-center text-light">
+                    Details
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </form>
     </Container>
   );
 };

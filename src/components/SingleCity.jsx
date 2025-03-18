@@ -54,10 +54,16 @@ const SingleCity = () => {
     return <div>Errore: {error}</div>;
   }
 
-  //conversione unità di misura
+  // Conversione unità di misura
   const kelvinToCelsius = (kelvin) => {
     const celsius = (kelvin - 273.15).toFixed(2);
     return Math.round(celsius);
+  };
+
+  // Gestione del form per evitare il comportamento predefinito
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Form submission prevented");
   };
 
   return (
@@ -65,64 +71,66 @@ const SingleCity = () => {
       <Link to="/" className="navbar-brand d-block text-center text-light mb-4">
         Torna alla home
       </Link>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Body>
-              <Card.Title>Meteo in {weatherData.name}</Card.Title>
-              <Card.Text>Temperatura: {kelvinToCelsius(weatherData.main.temp)}°C</Card.Text>
-              <Card.Text>Temperatura percepita: {kelvinToCelsius(weatherData.main.feels_like)}°C</Card.Text>
-              <Card.Text>Temperatura Minima: {kelvinToCelsius(weatherData.main.temp_min)}°C</Card.Text>
-              <Card.Text>Temperatura Massima: {kelvinToCelsius(weatherData.main.temp_max)}°C</Card.Text>
-              <Card.Text>Pressione atmosferica: {weatherData.main.pressure} hPa</Card.Text>
-              <Card.Text>Umidità: {weatherData.main.humidity}%</Card.Text>
-              <Card.Text>Velocità del vento: {weatherData.wind.speed} m/s</Card.Text>
-              <Card.Text>
-                Clima:{" "}
-                {weatherData.weather.map((item) => (
-                  <span key={item.id}>
-                    <img
-                      src={`https://openweathermap.org/img/wn/${item.icon}.png`}
-                      alt={item.description}
-                      title={item.description}
-                    />
-                    {item.description}
-                  </span>
-                ))}
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      <Container className="my-4">
-        <h2>Previsioni per i prossimi 5 giorni</h2>
+      <form onSubmit={handleSubmit}>
         <Row>
-          {forecastData &&
-            forecastData.list.map((item, index) => (
-              <Col key={index} sm={6} md={4} lg={3} xxl={2}>
-                <Card className="mb-3">
-                  <Card.Body>
-                    <Card.Text>Data e ora: {item.dt_txt}</Card.Text>
-                    <Card.Text>Temperatura: {kelvinToCelsius(item.main.temp)}°C</Card.Text>
-                    <Card.Text>Clima:</Card.Text>
-                    {item.weather.map((weatherItem) => (
-                      <div key={weatherItem.id}>
-                        <div>
-                          <img
-                            src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
-                            alt={weatherItem.description}
-                            title={weatherItem.description}
-                          />
-                        </div>
-                        <Card.Text>{weatherItem.description}</Card.Text>
-                      </div>
-                    ))}
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+          <Col>
+            <Card>
+              <Card.Body>
+                <Card.Title>Meteo in {weatherData.name}</Card.Title>
+                <Card.Text>Temperatura: {kelvinToCelsius(weatherData.main.temp)}°C</Card.Text>
+                <Card.Text>Temperatura percepita: {kelvinToCelsius(weatherData.main.feels_like)}°C</Card.Text>
+                <Card.Text>Temperatura Minima: {kelvinToCelsius(weatherData.main.temp_min)}°C</Card.Text>
+                <Card.Text>Temperatura Massima: {kelvinToCelsius(weatherData.main.temp_max)}°C</Card.Text>
+                <Card.Text>Pressione atmosferica: {weatherData.main.pressure} hPa</Card.Text>
+                <Card.Text>Umidità: {weatherData.main.humidity}%</Card.Text>
+                <Card.Text>Velocità del vento: {weatherData.wind.speed} m/s</Card.Text>
+                <Card.Text>
+                  Clima:{" "}
+                  {weatherData.weather.map((item) => (
+                    <span key={item.id}>
+                      <img
+                        src={`https://openweathermap.org/img/wn/${item.icon}.png`}
+                        alt={item.description}
+                        title={item.description}
+                      />
+                      {item.description}
+                    </span>
+                  ))}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
-      </Container>
+        <Container className="my-4">
+          <h2>Previsioni per i prossimi 5 giorni</h2>
+          <Row>
+            {forecastData &&
+              forecastData.list.map((item, index) => (
+                <Col key={index} sm={6} md={4} lg={3} xxl={2}>
+                  <Card className="mb-3">
+                    <Card.Body>
+                      <Card.Text>Data e ora: {item.dt_txt}</Card.Text>
+                      <Card.Text>Temperatura: {kelvinToCelsius(item.main.temp)}°C</Card.Text>
+                      <Card.Text>Clima:</Card.Text>
+                      {item.weather.map((weatherItem) => (
+                        <div key={weatherItem.id}>
+                          <div>
+                            <img
+                              src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
+                              alt={weatherItem.description}
+                              title={weatherItem.description}
+                            />
+                          </div>
+                          <Card.Text>{weatherItem.description}</Card.Text>
+                        </div>
+                      ))}
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+          </Row>
+        </Container>
+      </form>
     </Container>
   );
 };
