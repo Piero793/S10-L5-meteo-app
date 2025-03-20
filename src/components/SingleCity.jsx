@@ -15,14 +15,11 @@ const SingleCity = () => {
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        console.log(`Fetching ${cityName}...`);
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`);
         if (!response.ok) {
           throw new Error(`Errore nella richiesta: ${response.status}`);
         }
-        console.log("Response:", response);
         const data = await response.json();
-        console.log("dati:", data);
         setWeatherData(data);
 
         const { lat, lon } = data.coord;
@@ -33,8 +30,18 @@ const SingleCity = () => {
           throw new Error(`Errore nella richiesta: ${forecastResponse.status}`);
         }
         const forecastData = await forecastResponse.json();
-        setForecastData(forecastData);
 
+        // Raggruppa le previsioni per giorno
+        const groupedForecast = {};
+        forecastData.list.forEach((item) => {
+          const date = item.dt_txt.split(" ")[0]; // Prende solo la data senza l'orario
+          if (!groupedForecast[date]) {
+            groupedForecast[date] = [];
+          }
+          groupedForecast[date].push(item);
+        });
+
+        setForecastData(groupedForecast);
         setLoading(false);
       } catch (error) {
         console.error("Errore:", error);
@@ -54,83 +61,53 @@ const SingleCity = () => {
     return <div>Errore: {error}</div>;
   }
 
-  // Conversione unità di misura
-  const kelvinToCelsius = (kelvin) => {
-    const celsius = (kelvin - 273.15).toFixed(2);
-    return Math.round(celsius);
-  };
-
-  // Gestione del form per evitare il comportamento predefinito
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Form submission prevented");
-  };
+  const kelvinToCelsius = (kelvin) => Math.round(kelvin - 273.15);
 
   return (
     <Container className="text-center mt-4">
       <Link to="/" className="navbar-brand d-block text-center text-light mb-4">
         Torna alla home
       </Link>
-      <form onSubmit={handleSubmit}>
+      <Row>
+        <Col>
+          <Card>
+            <Card.Body>
+              <Card.Title>Meteo in {weatherData.name}</Card.Title>
+              <Card.Text>Temperatura: {kelvinToCelsius(weatherData.main.temp)}°C</Card.Text>
+              <Card.Text>Umidità: {weatherData.main.humidity}%</Card.Text>
+              <Card.Text>Vento: {weatherData.wind.speed} m/s</Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      <Container className="my-4">
+        <h2>Previsioni per i prossimi 5 giorni</h2>
         <Row>
-          <Col>
-            <Card>
-              <Card.Body>
-                <Card.Title>Meteo in {weatherData.name}</Card.Title>
-                <Card.Text>Temperatura: {kelvinToCelsius(weatherData.main.temp)}°C</Card.Text>
-                <Card.Text>Temperatura percepita: {kelvinToCelsius(weatherData.main.feels_like)}°C</Card.Text>
-                <Card.Text>Temperatura Minima: {kelvinToCelsius(weatherData.main.temp_min)}°C</Card.Text>
-                <Card.Text>Temperatura Massima: {kelvinToCelsius(weatherData.main.temp_max)}°C</Card.Text>
-                <Card.Text>Pressione atmosferica: {weatherData.main.pressure} hPa</Card.Text>
-                <Card.Text>Umidità: {weatherData.main.humidity}%</Card.Text>
-                <Card.Text>Velocità del vento: {weatherData.wind.speed} m/s</Card.Text>
-                <Card.Text>
-                  Clima:{" "}
-                  {weatherData.weather.map((item) => (
-                    <span key={item.id}>
-                      <img
-                        src={`https://openweathermap.org/img/wn/${item.icon}.png`}
-                        alt={item.description}
-                        title={item.description}
-                      />
-                      {item.description}
-                    </span>
-                  ))}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-        <Container className="my-4">
-          <h2>Previsioni per i prossimi 5 giorni</h2>
-          <Row>
-            {forecastData &&
-              forecastData.list.map((item, index) => (
+          {forecastData &&
+            Object.keys(forecastData).map((date, index) => {
+              const dailyForecasts = forecastData[date];
+              const avgTemp = dailyForecasts.reduce((sum, item) => sum + item.main.temp, 0) / dailyForecasts.length;
+              const mainWeather = dailyForecasts[0].weather[0];
+
+              return (
                 <Col key={index} sm={6} md={4} lg={3} xxl={2}>
                   <Card className="mb-3">
                     <Card.Body>
-                      <Card.Text>Data e ora: {item.dt_txt}</Card.Text>
-                      <Card.Text>Temperatura: {kelvinToCelsius(item.main.temp)}°C</Card.Text>
-                      <Card.Text>Clima:</Card.Text>
-                      {item.weather.map((weatherItem) => (
-                        <div key={weatherItem.id}>
-                          <div>
-                            <img
-                              src={`https://openweathermap.org/img/wn/${weatherItem.icon}.png`}
-                              alt={weatherItem.description}
-                              title={weatherItem.description}
-                            />
-                          </div>
-                          <Card.Text>{weatherItem.description}</Card.Text>
-                        </div>
-                      ))}
+                      <Card.Title>{date}</Card.Title>
+                      <Card.Text>Temperatura media: {kelvinToCelsius(avgTemp)}°C</Card.Text>
+                      <img
+                        src={`https://openweathermap.org/img/wn/${mainWeather.icon}.png`}
+                        alt={mainWeather.description}
+                        title={mainWeather.description}
+                      />
+                      <Card.Text>{mainWeather.description}</Card.Text>
                     </Card.Body>
                   </Card>
                 </Col>
-              ))}
-          </Row>
-        </Container>
-      </form>
+              );
+            })}
+        </Row>
+      </Container>
     </Container>
   );
 };
