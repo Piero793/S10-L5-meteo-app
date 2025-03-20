@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Navbar } from "react-bootstrap";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+import { Navbar, Container, Form, InputGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { Search } from "react-bootstrap-icons";
 
 function NavBar() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,38 +9,38 @@ function NavBar() {
 
   const handleSearch = (event) => {
     if (event.key === "Enter" && searchQuery.trim() !== "") {
-      console.log(`Navigating to /city/${searchQuery}`);
       navigate(`/city/${searchQuery}`);
     }
   };
 
   return (
-    <Navbar expand="lg" className="navBarColor">
+    <Navbar expand="lg" className="navBarColor sticky-top p-3">
       <Container fluid>
-        <Link to="/" className="navbar-brand d-none d-lg-block">
+        <Link to="/" className="navbar-brand d-flex align-items-center">
           <img
             src="https://www.freeiconspng.com/uploads/weather-icon-png-2.png"
             alt="meteo"
-            style={{ widt: 50, height: 50 }}
+            style={{ width: 50, height: 50 }}
           />
-          <span>
-            <i className="bi bi-search ms-2"></i>
-          </span>
+          <span className="ms-2">MeteoApp</span>
         </Link>
 
-        <Navbar.Collapse id="navbarScroll" className="d-flex flex-grow-1">
-          <Form className="d-flex flex-grow-1">
+        <Navbar.Collapse id="navbarScroll" className="d-flex flex-grow-1 justify-content-center">
+          <Form className="d-flex flex-grow-1" style={{ maxWidth: "400px" }}>
             <InputGroup className="flex-grow-1">
               <Form.Control
                 type="search"
-                placeholder="Cerca il nome di una città..."
+                placeholder="Cerca una città..."
                 aria-label="Search"
                 aria-describedby="search-icon"
-                className="flex-grow-1"
+                className="flex-grow-1 shadow-sm"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleSearch}
               />
+              <InputGroup.Text id="search-icon" className="bg-white border-0">
+                <Search color="#1e3c72" size={20} />
+              </InputGroup.Text>
             </InputGroup>
           </Form>
         </Navbar.Collapse>
